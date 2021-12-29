@@ -1,10 +1,12 @@
 // const express = require('express')
 import express from 'express'
 import authRouter from './routes/auth'
+import {readdirSync} from 'fs'
 
 const app = express()
 
-app.use('/api/v1', authRouter)
+readdirSync('./routes').map((r) => app.use('/api/v1', require(`./routes/${r}`)))
+// app.use('/api/v1', authRouter)
 
 const port = 5000
 app.listen(port, () => {
