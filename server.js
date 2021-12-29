@@ -1,13 +1,12 @@
 // const express = require('express')
 import express from 'express'
+import authRouter from './routes/auth'
 
 const app = express()
 
-app.get('/', (req, res, next) => {
-  res.status(200).json({message: 'welcome to home page'})
-})
+app.use('/api/v1', authRouter)
 
 const port = 5000
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`)
+  console.log(`Server running at http://localhost:${port}/api/v1`)
 })
