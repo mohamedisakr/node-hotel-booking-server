@@ -1,9 +1,8 @@
 const express = require('express')
+const {showMessage} = require('../controllers/auth')
 
 const router = express.Router()
 
-router.get('/', (req, res, next) => {
-  res.status(200).json({message: 'welcome to home page'})
-})
+router.get('/', showMessage)
 
 module.exports = router
