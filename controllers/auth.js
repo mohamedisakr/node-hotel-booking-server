@@ -40,7 +40,7 @@ export const register = async (req, res, next) => {
 }
 
 export const login = async (req, res, next) => {
-  console.log(req.body)
+  // console.log(req.body)
   const {email, password} = req.body
 
   try {
@@ -69,7 +69,7 @@ export const login = async (req, res, next) => {
 
       // Generating token & send to client
       const token = jwt.sign({_id: user._id}, secret, {expiresIn: '60d'})
-      return res.status(200).json({token, safeUser})
+      return res.status(200).json({token, user: safeUser})
     })
   } catch (err) {
     console.log(`Login error: ${err}`)
