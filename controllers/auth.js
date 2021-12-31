@@ -41,6 +41,31 @@ export const login = async (req, res, next) => {
   console.log(req.body)
   const {email, password} = req.body
 
+  try {
+    // check if user's email already exist
+    const user = await User.findOne({email}).exec()
+    if (!user) {
+      // return res.status(404).json({message: `User not found`})
+      return res.status(400).json({message: `User not found`})
+    }
+
+    // compare password
+    user.comparePassword(password, (err, match) => {
+      console.log(`Compare password error : ${err}`)
+      if (!match || err) {
+        return res.status(400).json({message: `Invalid credentials`})
+      }
+      console.log(`Generating token & send to client`)
+    })
+  } catch (err) {
+    console.log(`Login error: ${err}`)
+    return res.status(400).json({message: 'Login failed'})
+  }
+}
+// module.exports = {register}
+
+/**
+ 
   // validation
   if (!password) {
     return res.status(400).json({message: 'Password is required'})
@@ -65,11 +90,10 @@ export const login = async (req, res, next) => {
 
   try {
     const res = await User.findOne({email, password}).exec()
-    console.log(`User created ${newUser}`)
+    // console.log(`User created ${newUser}`)
     return res.status(201).json({data: newUser, message: `User created`})
   } catch (error) {
     console.error(`User creation failed ${error}`)
     return res.status(400).json({message: `User creation failed`})
   }
-}
-// module.exports = {register}
+ */
