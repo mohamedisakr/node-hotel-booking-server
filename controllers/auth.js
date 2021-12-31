@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const secret = process.env.JWT_SECRET
 
 export const register = async (req, res, next) => {
   console.log(req.body)
@@ -55,7 +57,19 @@ export const login = async (req, res, next) => {
       if (!match || err) {
         return res.status(400).json({message: `Invalid credentials`})
       }
-      console.log(`Generating token & send to client`)
+
+      // exclude password from user object
+      const safeUser = {
+        _id: user._id,
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      }
+
+      // Generating token & send to client
+      const token = jwt.sign({_id: user._id}, secret, {expiresIn: '60d'})
+      return res.status(200).json({token, safeUser})
     })
   } catch (err) {
     console.log(`Login error: ${err}`)
@@ -63,37 +77,3 @@ export const login = async (req, res, next) => {
   }
 }
 // module.exports = {register}
-
-/**
- 
-  // validation
-  if (!password) {
-    return res.status(400).json({message: 'Password is required'})
-  }
-
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({message: 'Password must be at least 6 characters'})
-  }
-
-  // TODO: email validation
-
-  // check for existing email
-  const userExist = await User.findOne({email}).exec()
-  if (!userExist) {
-    return res.status(404).json({message: `Invalid credentials`})
-  }
-
-  // const newUser = new User({name, email, password})
-  const credentials = {email, password}
-
-  try {
-    const res = await User.findOne({email, password}).exec()
-    // console.log(`User created ${newUser}`)
-    return res.status(201).json({data: newUser, message: `User created`})
-  } catch (error) {
-    console.error(`User creation failed ${error}`)
-    return res.status(400).json({message: `User creation failed`})
-  }
- */
