@@ -39,6 +39,7 @@ export const getAll = async (req, res, next) => {
       .populate('postedBy', '_id name')
       .exec()
     const result = {data: hotels, total: hotels.length}
+    // return res.status(200).json(hotels)
     return res.status(200).json(result)
   } catch (error) {
     console.log(error)
