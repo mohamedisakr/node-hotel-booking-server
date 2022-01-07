@@ -16,17 +16,7 @@ export const create = async (req, res, next) => {
     bed,
     postedBy,
   })
-  console.table({
-    title,
-    content,
-    location,
-    image,
-    price,
-    from,
-    to,
-    bed,
-    postedBy,
-  })
+  // console.table({    title,    content,    location,    image,    price,    from,    to,    bed,    postedBy,  // })
   try {
     hotelToAdd.save((err, result) => {
       if (err) {
@@ -39,5 +29,19 @@ export const create = async (req, res, next) => {
   } catch (error) {
     console.error(`Hotel creation failed ${error}`)
     return res.status(400).json({message: `Hotel creation failed`})
+  }
+}
+
+export const getAll = async (req, res, next) => {
+  try {
+    const hotels = await Hotel.find({})
+      .limit(20)
+      .populate('postedBy', '_id name')
+      .exec()
+    const result = {data: hotels, total: hotels.length}
+    return res.status(200).json(result)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: 'server error'})
   }
 }
