@@ -46,3 +46,18 @@ export const getAll = async (req, res, next) => {
     return res.status(500).json({message: 'server error'})
   }
 }
+
+export const getSellerHotels = async (req, res, next) => {
+  try {
+    const id = req.user._id
+    const hotels = await Hotel.find({postedBy: id})
+      .populate('postedBy', '_id name')
+      .exec()
+
+    const result = {data: hotels, total: hotels.length}
+    return res.status(200).json(result)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: 'server error'})
+  }
+}
