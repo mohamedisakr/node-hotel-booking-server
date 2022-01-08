@@ -65,9 +65,21 @@ export const getSellerHotels = async (req, res, next) => {
 export const remove = async (req, res, next) => {
   try {
     const {hotelId} = req.params
-    console.log(`hotel id : ${hotelId}`)
+
     const hotelToRemove = await Hotel.findByIdAndDelete(hotelId).exec()
     return res.status(204).json({message: 'Hotel deleted successfully'})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: 'server error'})
+  }
+}
+
+export const read = async (req, res, next) => {
+  try {
+    const {hotelId} = req.params
+
+    const hotelToRead = await Hotel.findById(hotelId).exec()
+    return res.status(200).json({data: hotelToRead})
   } catch (error) {
     console.log(error)
     return res.status(500).json({message: 'server error'})
