@@ -85,3 +85,23 @@ export const read = async (req, res, next) => {
     return res.status(500).json({message: 'server error'})
   }
 }
+
+export const update = async (req, res, next) => {
+  try {
+    const {hotelId} = req.params
+    const hotelToUpdate = req.body
+
+    const updatedHotel = await Hotel.findByIdAndUpdate(hotelId, hotelToUpdate, {
+      new: true,
+    }).exec()
+
+    return res
+      .status(204)
+      .json({data: updatedHotel, message: 'Hotel updated successfully'})
+    // .send(updatedHotel)
+    // .json(updatedHotel)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message: 'server error'})
+  }
+}
