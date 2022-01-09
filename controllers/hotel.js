@@ -78,7 +78,9 @@ export const read = async (req, res, next) => {
   try {
     const {hotelId} = req.params
 
-    const hotelToRead = await Hotel.findById(hotelId).exec()
+    const hotelToRead = await Hotel.findById(hotelId)
+      .populate('postedBy', '_id name')
+      .exec()
     return res.status(200).json({data: hotelToRead})
   } catch (error) {
     console.log(error)
