@@ -107,3 +107,16 @@ export const update = async (req, res, next) => {
     return res.status(500).json({message: 'server error'})
   }
 }
+
+export const searchListings = async (req, res, next) => {
+  const {location, date, bed} = req.body
+  const [fromDate, toDate] = date.split(',')
+
+  console.log(location, date, bed)
+  let results = await Hotel.find({
+    from: {$gte: new Date(fromDate)},
+    location,
+  }).exec()
+  console.log(results)
+  return res.json(results)
+}
