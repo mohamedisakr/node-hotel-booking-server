@@ -113,10 +113,12 @@ export const searchListings = async (req, res, next) => {
   // const [fromDate, toDate] = date.split(',')
   // console.log(location, date, bed)
 
-  const fromDate = (date && date.split(',')[0]) || Date.now()
+  const fromDatePlaceholder = new Date().toISOString()
+  const fromDate = (date && date.split(',')[0]) || fromDatePlaceholder
   let results = await Hotel.find({
-    from: {$gte: new Date(fromDate)},
+    from: {$gte: new Date(fromDate)}, //.toISOString()
     location,
+    bed,
   }).exec()
   console.log(results)
   return res.json(results)
