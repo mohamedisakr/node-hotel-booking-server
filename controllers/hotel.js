@@ -113,7 +113,7 @@ export const searchListings = async (req, res, next) => {
   // const [fromDate, toDate] = date.split(',')
   // console.log(location, date, bed)
 
-  const fromDate = date.split(',')[0]
+  const fromDate = (date && date.split(',')[0]) || Date.now()
   let results = await Hotel.find({
     from: {$gte: new Date(fromDate)},
     location,
